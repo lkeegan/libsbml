@@ -161,6 +161,35 @@ START_TEST (test_SampledField_samples)
 END_TEST
 
 
+START_TEST (test_SampledField_samples_doubles)
+{
+  fail_unless(G->isSetSamples() == false);
+  fail_unless(G->isSetSamplesLength() == false);
+
+  double samples [] = {1.1e-305, 9.5e-312, 4.0, 2.1};
+  G->setSamples(samples, 4);
+  G->setSamplesLength(4);
+
+  fail_unless(G->isSetSamples() == true);
+  fail_unless(G->isSetSamplesLength() == true);
+
+  fail_unless(G->getSamplesLength() == 4);
+
+  double samplesRet [4];
+  G->getSamples(samplesRet);
+  fail_unless(samplesRet[0] == samples[0]);
+  fail_unless(samplesRet[1] == samples[1]);
+  fail_unless(samplesRet[2] == samples[2]);
+  fail_unless(samplesRet[3] == samples[3]);
+
+  G->unsetSamples();
+
+  fail_unless(G->isSetSamples() == false);
+  fail_unless(G->isSetSamplesLength() == false);
+}
+END_TEST
+
+
 START_TEST (test_SampledField_dataType)
 {
   fail_unless(G->isSetDataType() == false);
@@ -206,6 +235,7 @@ create_suite_SampledField (void)
 
   tcase_add_test( tcase, test_SampledField_samplesLength   );
   tcase_add_test( tcase, test_SampledField_samples         );
+  tcase_add_test( tcase, test_SampledField_samples_doubles );
   tcase_add_test( tcase, test_SampledField_dataType        );
   tcase_add_test( tcase, test_SampledField_output         );
 
